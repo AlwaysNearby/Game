@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+    public GameObject soldierPlayer;
+
     private InputControl _input;
     private float _speed;
 
@@ -13,6 +16,8 @@ public class Player : MonoBehaviour
     private Vector3 _startPos;
 
     private Animator _animatorController;
+
+    private float _timeReload;
 
     [SerializeField] private bool _canShoot;
 
@@ -24,6 +29,7 @@ public class Player : MonoBehaviour
         _startPos = transform.position;
         _endPos = transform.position;
         _animatorController = GetComponent<Animator>();
+        _timeReload = 0f;
     }
     // Update is called once per frame
     void Update()
@@ -39,21 +45,34 @@ public class Player : MonoBehaviour
         Flip();
         if(_canShoot)
         {
-            if(Input.GetMouseButtonDown(0)){
-
+            if (Time.time - _timeReload > 0.35f)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    var newWeapon = GetComponent<Weapon>();
+                    newWeapon.CreateBullet(Input.mousePosition, transform.position);
+                    _timeReload = Time.time;
+                }
             }
         }
     }
 
     void ChangePlayerStateAnimation(float _directionX, float _directionY)
     {
-        if(_directionX > 0 || _directionY > 0)
+        if (!_canShoot)
         {
-            _animatorController.SetBool("Run", true);
+            if (_directionX > 0 || _directionY > 0)
+            {
+                _animatorController.SetBool("Run", true);
+            }
+            else
+            {
+                _animatorController.SetBool("Run", false);
+            }
         }
         else
         {
-            _animatorController.SetBool("Run", false);
+
         }
 
     }
@@ -61,7 +80,9 @@ public class Player : MonoBehaviour
     void Flip()
     {
         var positionMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        var angleRotation = Mathf.Atan2(positionMouse.y, positionMouse.x);
+        var posPlayer = transform.position;
+        var differencePos = positionMouse - posPlayer;
+        var angleRotation = Mathf.Atan2(differencePos.y, differencePos.x);
         angleRotation = angleRotation * 180/Mathf.PI;
         transform.rotation = Quaternion.Euler(0,0, angleRotation);
 
@@ -72,9 +93,12 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Gun")
         {
-            
-        }
-        
-    }
+            var posPlayer = transform.position;
+            Instantiate(soldierPlayer, posPlayer, Quaternion.identity);
+            Destroy(this.gameObject);
+            Destroy(other.gameObject);
 
+        }
+    }
+   
 }
