@@ -8,60 +8,84 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    class Way
+    {
+        public int startPos;
+        public int endPos;
+
+        public Way(int rnd)
+        {
+            startPos = rnd;
+            endPos = startPos + Random.Range(1, 5);
+        }
+    }
 
     private int counterPoint;
     private float _speed;
-    private float _lastTime;
-    private Transform _startPos;
     private Transform _endPos;
     private Rigidbody2D rigidbody2D;
     [SerializeField] private GameObject[] _wayPoints;
+    private Way way;
     
     void Start()
     {
-        counterPoint = 0;
-        _speed = Random.Range(1, 4);
-        _startPos = _wayPoints[counterPoint].transform;
-        _endPos = _wayPoints[counterPoint + 1].transform;
+        way = new Way(Random.Range(0, 6));
+
+        counterPoint = way.startPos; ;
+        _speed = Random.Range(0.5f, 2f);
+        _endPos = _wayPoints[counterPoint].transform;
         rigidbody2D = GetComponent<Rigidbody2D>();
+        transform.position = _endPos.position;
+        print(way.startPos + " " + way.endPos);
         
     }
-    void Update()
+
+
+    private void Update()
     {
-        if (Vector3.Distance(transform.position,_endPos.position) < float.Epsilon)
+
+       
+    }
+
+    private void FixedUpdate()
+    {
+        if (Vector3.Distance(transform.position, _endPos.position) < 0.2f)
         {
-            if (counterPoint < _wayPoints.Length - 2)
+            if (counterPoint < way.endPos)
             {
                 counterPoint++;
-                
+
             }
-            _startPos = _wayPoints[counterPoint].transform;
-            _endPos = _wayPoints[counterPoint + 1].transform;
+            _endPos = _wayPoints[counterPoint].transform;
+            var direction = _endPos.position - transform.position;
+            var angle = Mathf.Atan2(direction.y, direction.x) * 180/Mathf.PI;
+            transform.localRotation = Quaternion.Euler(0, 0, angle);
             
+
+
 
         }
         else
         {
-            var difference = Vector3.MoveTowards(_startPos.position, _endPos.position, Time.deltaTime * _speed);
+            var difference = Vector3.MoveTowards(transform.position, _endPos.position, Time.fixedDeltaTime * _speed);
             rigidbody2D.MovePosition(difference);
-            _startPos.position = difference;
-            
+
+
 
         }
 
-        if(transform.position.Equals(_wayPoints[_wayPoints.Length - 1].transform.position))
+        if (Vector3.Distance(transform.position, _wayPoints[way.endPos].transform.position) < 0.2f)
         {
-            ReverseWay(_wayPoints);
-            counterPoint = 0;
+            ReverseWay(_wayPoints, way.startPos, way.endPos);
+            counterPoint = way.startPos;
+            print("1");
 
         }
-
     }
 
-
-    void ReverseWay(GameObject[] way)
+    void ReverseWay(GameObject[] way, int min, int max)
     {
-        for(int i = 0, j = way.Length - 1; i < j; i++, j--)
+        for(int i = min, j = max; i < j; i++, j--)
         {
             var temp = way[i];
             way[i] = way[j];

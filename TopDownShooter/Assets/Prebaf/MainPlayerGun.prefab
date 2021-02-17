@@ -45,12 +45,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3855313488644933504}
   - component: {fileID: 3855313488644933509}
-  - component: {fileID: 3855313488644933508}
   - component: {fileID: 3855313488644933511}
   - component: {fileID: 3855313488644933510}
   - component: {fileID: 2418127396270513606}
   - component: {fileID: 634159339366931715}
   - component: {fileID: 6183634007622371929}
+  - component: {fileID: 1480682077641033384}
   m_Layer: 0
   m_Name: MainPlayerGun
   m_TagString: Untagged
@@ -128,32 +128,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3855313488644933508
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3855313488644933515}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.092363924, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.49, y: 0.43}
-    newSize: {x: 0.49, y: 0.43}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.24157336, y: 0.43}
-  m_EdgeRadius: 0
 --- !u!114 &3855313488644933511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,3 +209,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05bbe1bac848d004d8715a9bcc9175b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &1480682077641033384
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3855313488644933515}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.094013855, y: -0.0039407215}
+  m_Size: {x: 0.19613647, y: 0.43708202}
+  m_Direction: 0
