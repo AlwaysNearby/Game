@@ -17,4 +17,6 @@ public class Soldier : Unit
     {
         base.Move();
     }
+
+    
 }

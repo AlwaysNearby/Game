@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3531454474003446502}
   - component: {fileID: 3763826368701910356}
   - component: {fileID: 2754807943258367092}
+  - component: {fileID: -6020178403853090380}
   m_Layer: 0
   m_Name: Soldier
   m_TagString: Untagged
@@ -97,7 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6f657a130a31c47b9164fa9beaac3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0.2
+  _speed: 0.5
+  _cost: 20
+  _unitType: 0
+  _namePoints: InfantryPoints
 --- !u!114 &3763826368701910356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,7 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1528a6fdb8f26847be956f2f7bd3b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
+  _startHealth: 100
+  _step: 100
 --- !u!61 &2754807943258367092
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -137,3 +142,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.30821133, y: 0.44233334}
   m_EdgeRadius: 0
+--- !u!50 &-6020178403853090380
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3531454474003446521}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

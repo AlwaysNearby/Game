@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MachineGun : AttackTower, IChoosable
+public class MachineGun : AttackTower
 {
 
     
@@ -19,10 +19,7 @@ public class MachineGun : AttackTower, IChoosable
     }
 
     
-    public Unit Select(List<Unit> targets)
-    {
-        return targets[0];
-    }
+  
     
     
     

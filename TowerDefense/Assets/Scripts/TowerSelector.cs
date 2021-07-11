@@ -20,6 +20,10 @@ public class TowerSelector : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _builder.SetTowerToBuild(_selectedTower);
+
+        if (Balance.Instance.Cost >= _selectedTower.buildCost)
+        {
+            _builder.SetTowerToBuild(_selectedTower);
+        }
     }
 }

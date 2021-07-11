@@ -76,7 +76,11 @@ public class Builder : MonoBehaviour
             yield return null;
         }
 
-        FindPlaceForTower(visibleTower)?.ToPut(tower);
+        var placeForTower = FindPlaceForTower(visibleTower);
+        if(placeForTower != null)
+        {
+           placeForTower.ToPut(tower);
+        }
         visibleTower.SetActive(false);
 
     }

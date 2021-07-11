@@ -113,22 +113,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  buildCost: 20
   level:
-    Max: 2
-    Current: 0
-    CharacteristicsTower:
-    - Ammo: 10
+    max: 2
+    current: 0
+    characteristicsTower:
+    - Ammo: 20
       Damage: 5
-      ReloadTime: 0.2
+      ReloadTime: 0.8
       ShootingInterval: 0.5
-    - Ammo: 30
+      upgradeCost: 40
+      saleCost: 10
+    - Ammo: 40
       Damage: 25
       ReloadTime: 0.5
       ShootingInterval: 0.8
-    LevelSprite:
+      upgradeCost: 0
+      saleCost: 20
+    levelSprite:
     - {fileID: 21300000, guid: b79a0c55d4619e744bc43c898b2824d4, type: 3}
     - {fileID: 21300000, guid: 4511541e927d6f240865910f3eb8b6e1, type: 3}
-    ReloadSprite: []
+    reloadSprite: []
 --- !u!50 &3001158552925316456
 Rigidbody2D:
   serializedVersion: 4
@@ -165,7 +170,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.013053775}
   serializedVersion: 2
-  m_Radius: 1.0510076
+  m_Radius: 1.5
 --- !u!114 &-1893302084857637278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,20 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592d14669bfe6774b9af6c175811ab38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3585404354037909291}
-        m_MethodName: IncreaseLevel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  _tower: {fileID: 3585404354037909291}
 --- !u!61 &2454351362462635431
 BoxCollider2D:
   m_ObjectHideFlags: 0

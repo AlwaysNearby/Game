@@ -6,11 +6,11 @@ public class WayPoints : MonoBehaviour
 {
 
 
-    [SerializeField] private Transform[] _points;
+    [SerializeField] private Transform[] _allPoints;
 
-    public Transform[] Points
+    public Way GetWayFor(Unit unit)
     {
-        get => _points;
-        private set { ; }
+        return unit.LeadTheWay(_allPoints);
     }
+    
 }

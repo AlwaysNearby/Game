@@ -33,6 +33,14 @@ public class @InputSystem : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""6efca2ac-af37-43f6-b51e-82d4654b2978"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -79,6 +87,28 @@ public class @InputSystem : IInputActionCollection, IDisposable
                     ""action"": ""LeftClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9f19c79-b48a-4a45-a295-93aa87cc6c93"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MouseAndKeyBoard"",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4f638d3-b17c-4372-acf2-604df12bfc5c"",
+                    ""path"": ""<Touchscreen>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""TouchScreen"",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -98,6 +128,14 @@ public class @InputSystem : IInputActionCollection, IDisposable
                     ""name"": ""ClickDown"",
                     ""type"": ""PassThrough"",
                     ""id"": ""a266f93b-5df9-43e3-bd73-253a0cf9d52a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ClickRelease"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b623b8d7-7181-4367-9282-fdba455ea8e7"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -147,6 +185,17 @@ public class @InputSystem : IInputActionCollection, IDisposable
                     ""action"": ""ClickDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc06c537-c5e3-49ab-8d2e-b2dac3cb9927"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": ""MouseAndKeyBoard"",
+                    ""action"": ""ClickRelease"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,10 +234,12 @@ public class @InputSystem : IInputActionCollection, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
         m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
+        m_UI_Scroll = m_UI.FindAction("Scroll", throwIfNotFound: true);
         // InputPlayer
         m_InputPlayer = asset.FindActionMap("InputPlayer", throwIfNotFound: true);
         m_InputPlayer_Click = m_InputPlayer.FindAction("Click", throwIfNotFound: true);
         m_InputPlayer_ClickDown = m_InputPlayer.FindAction("ClickDown", throwIfNotFound: true);
+        m_InputPlayer_ClickRelease = m_InputPlayer.FindAction("ClickRelease", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -240,12 +291,14 @@ public class @InputSystem : IInputActionCollection, IDisposable
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_Point;
     private readonly InputAction m_UI_LeftClick;
+    private readonly InputAction m_UI_Scroll;
     public struct UIActions
     {
         private @InputSystem m_Wrapper;
         public UIActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputAction @LeftClick => m_Wrapper.m_UI_LeftClick;
+        public InputAction @Scroll => m_Wrapper.m_UI_Scroll;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -261,6 +314,9 @@ public class @InputSystem : IInputActionCollection, IDisposable
                 @LeftClick.started -= m_Wrapper.m_UIActionsCallbackInterface.OnLeftClick;
                 @LeftClick.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnLeftClick;
                 @LeftClick.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnLeftClick;
+                @Scroll.started -= m_Wrapper.m_UIActionsCallbackInterface.OnScroll;
+                @Scroll.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnScroll;
+                @Scroll.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnScroll;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -271,6 +327,9 @@ public class @InputSystem : IInputActionCollection, IDisposable
                 @LeftClick.started += instance.OnLeftClick;
                 @LeftClick.performed += instance.OnLeftClick;
                 @LeftClick.canceled += instance.OnLeftClick;
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
             }
         }
     }
@@ -281,12 +340,19 @@ public class @InputSystem : IInputActionCollection, IDisposable
     private IInputPlayerActions m_InputPlayerActionsCallbackInterface;
     private readonly InputAction m_InputPlayer_Click;
     private readonly InputAction m_InputPlayer_ClickDown;
+    private readonly InputAction m_InputPlayer_ClickRelease;
     public struct InputPlayerActions
     {
         private @InputSystem m_Wrapper;
         public InputPlayerActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @Click => m_Wrapper.m_InputPlayer_Click;
-        public InputAction @ClickDown => m_Wrapper.m_InputPlayer_ClickDown;
+        public InputAction @ClickDown
+        {
+            get => m_Wrapper.m_InputPlayer_ClickDown;
+            set => throw new NotImplementedException();
+        }
+
+        public InputAction @ClickRelease => m_Wrapper.m_InputPlayer_ClickRelease;
         public InputActionMap Get() { return m_Wrapper.m_InputPlayer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -302,6 +368,9 @@ public class @InputSystem : IInputActionCollection, IDisposable
                 @ClickDown.started -= m_Wrapper.m_InputPlayerActionsCallbackInterface.OnClickDown;
                 @ClickDown.performed -= m_Wrapper.m_InputPlayerActionsCallbackInterface.OnClickDown;
                 @ClickDown.canceled -= m_Wrapper.m_InputPlayerActionsCallbackInterface.OnClickDown;
+                @ClickRelease.started -= m_Wrapper.m_InputPlayerActionsCallbackInterface.OnClickRelease;
+                @ClickRelease.performed -= m_Wrapper.m_InputPlayerActionsCallbackInterface.OnClickRelease;
+                @ClickRelease.canceled -= m_Wrapper.m_InputPlayerActionsCallbackInterface.OnClickRelease;
             }
             m_Wrapper.m_InputPlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -312,6 +381,9 @@ public class @InputSystem : IInputActionCollection, IDisposable
                 @ClickDown.started += instance.OnClickDown;
                 @ClickDown.performed += instance.OnClickDown;
                 @ClickDown.canceled += instance.OnClickDown;
+                @ClickRelease.started += instance.OnClickRelease;
+                @ClickRelease.performed += instance.OnClickRelease;
+                @ClickRelease.canceled += instance.OnClickRelease;
             }
         }
     }
@@ -338,10 +410,12 @@ public class @InputSystem : IInputActionCollection, IDisposable
     {
         void OnPoint(InputAction.CallbackContext context);
         void OnLeftClick(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
     }
     public interface IInputPlayerActions
     {
         void OnClick(InputAction.CallbackContext context);
         void OnClickDown(InputAction.CallbackContext context);
+        void OnClickRelease(InputAction.CallbackContext context);
     }
 }

@@ -28,7 +28,7 @@ public class Attack
      
      public void DamageTo(IHealth target)
      {
-          target.Decrease(_level.CharacteristicsTower[_level.Current].Damage);
+          target.Decrease(_level.characteristicsTower[_level.current].Damage);
      }
 
 
@@ -38,7 +38,7 @@ public class Attack
           {
                if (CanIShoot())
                {
-                    _last = Time.time +_level.CharacteristicsTower[_level.Current].ShootingInterval; ;
+                    _last = Time.time +_level.characteristicsTower[_level.current].ShootingInterval; ;
                     _currentAmmo -= 1;
                     return true;
                }
@@ -47,7 +47,7 @@ public class Attack
           {
                if (!_inReload)
                {
-                    _endReloadTime = Time.time + _level.CharacteristicsTower[_level.Current].ReloadTime;
+                    _endReloadTime = Time.time + _level.characteristicsTower[_level.current].ReloadTime;
                     _inReload = true;
                     OnStartReload?.Invoke();
                }
@@ -61,7 +61,7 @@ public class Attack
 
      public void Reset()
      {
-          _currentAmmo = _level.CharacteristicsTower[_level.Current].Ammo;
+          _currentAmmo = _level.characteristicsTower[_level.current].Ammo;
           OnEndReload?.Invoke();
           _last = 0f;
           _endReloadTime = 0f;
@@ -74,7 +74,7 @@ public class Attack
           if (endReloadTime - currentTime < 0)
           {
                _inReload = false;
-               _currentAmmo = _level.CharacteristicsTower[_level.Current].Ammo;
+               _currentAmmo = _level.characteristicsTower[_level.current].Ammo;
                OnEndReload?.Invoke();
           }
      }

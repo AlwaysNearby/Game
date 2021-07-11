@@ -12,6 +12,9 @@ public abstract class Tower : MonoBehaviour
     [SerializeField] private UnityEvent OnUpgrade;
     private SpriteTower _spriteTower;
 
+    public int buildCost;
+    
+
     [FormerlySerializedAs("Level")] public Level level;
 
 
@@ -28,7 +31,7 @@ public abstract class Tower : MonoBehaviour
 
     public virtual void Upgrade()
     { 
-        SetNewSprite(level.LevelSprite[level.Current]);
+        SetNewSprite(level.levelSprite[level.current]);
     }
 
 
@@ -41,12 +44,17 @@ public abstract class Tower : MonoBehaviour
     public void IncreaseLevel()
     {
 
-        if (level.Current + 1 < level.Max)
+        if (level.current + 1 < level.max)
         {
-            level.Current += 1;
+            level.current += 1;
             OnUpgrade?.Invoke();
         }
 
+    }
+
+    public void Destroy()
+    {
+        Destroy(this.gameObject);
     }
     
 

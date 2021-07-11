@@ -7,6 +7,8 @@ public class Characteristic
 {
     public int Ammo;
     public float Damage, ReloadTime, ShootingInterval;
+    public int upgradeCost;
+    public int saleCost;
     
 
 }

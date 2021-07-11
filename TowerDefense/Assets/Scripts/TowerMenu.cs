@@ -1,29 +1,43 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class TowerMenu : MonoBehaviour, IPointerClickHandler
+public class TowerMenu : MonoBehaviour, IPointerDownHandler
 {
 
-    [SerializeField] private UnityEvent OnClick;
-    
-    
+    [SerializeField] private Tower _tower;
+    private ShoppingMenu _shoppingMenu;
+    private bool _isShoppingMenuOpen;
+
+
     void Start()
     {
-        
+        _shoppingMenu = FindObjectOfType<ShoppingMenu>().GetComponent<ShoppingMenu>();
+        _isShoppingMenuOpen = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    
+    
+    
+    
+    
+    
+    public void OnPointerDown(PointerEventData eventData)
     {
-        
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        OnClick?.Invoke();
+        _isShoppingMenuOpen = !_isShoppingMenuOpen;
+        Debug.Log("111111");
+        if (_isShoppingMenuOpen)
+        {
+            _shoppingMenu.Open(_tower);
+        }
+        else
+        {
+            
+            _shoppingMenu.Close();
+        }
     }
 }

@@ -20,6 +20,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Scroll",
+                    "type": "Value",
+                    "id": "6efca2ac-af37-43f6-b51e-82d4654b2978",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -66,6 +74,28 @@
                     "action": "LeftClick",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e9f19c79-b48a-4a45-a295-93aa87cc6c93",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKeyBoard",
+                    "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b4f638d3-b17c-4372-acf2-604df12bfc5c",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "TouchScreen",
+                    "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -85,6 +115,14 @@
                     "name": "ClickDown",
                     "type": "PassThrough",
                     "id": "a266f93b-5df9-43e3-bd73-253a0cf9d52a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ClickRelease",
+                    "type": "PassThrough",
+                    "id": "b623b8d7-7181-4367-9282-fdba455ea8e7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -132,6 +170,17 @@
                     "processors": "",
                     "groups": "TouchScreen",
                     "action": "ClickDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cc06c537-c5e3-49ab-8d2e-b2dac3cb9927",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "MouseAndKeyBoard",
+                    "action": "ClickRelease",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

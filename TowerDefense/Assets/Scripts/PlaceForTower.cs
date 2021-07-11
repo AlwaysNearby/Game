@@ -32,6 +32,7 @@ public class PlaceForTower : MonoBehaviour
         if(tower.Type != _placeType || _currentTower != null)
             return;
 
+        Balance.Instance.Decrease(tower.buildCost);
         _currentTower = Instantiate(tower, transform.position, quaternion.identity);
     }
 

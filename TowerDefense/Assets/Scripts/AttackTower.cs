@@ -7,12 +7,15 @@ using UnityEngine.Serialization;
 
 public abstract class AttackTower : Tower
 {
+
+
+    [SerializeField] private UnitType _targetType;
     
     private List<Unit> _targets;
-
-
-
     private Coroutine _startShoot;
+    
+    
+    
     protected Attack Attack;
     
     public virtual void Start()
@@ -75,10 +78,32 @@ public abstract class AttackTower : Tower
         while (targets.Count > 0)
         {
 
-            Shoot(targets[0]);
+            Shoot(Select(targets));
 
             yield return null;
         }
+        
+        Attack.Reset();
+    }
+
+    
+
+    private Unit Select(List<Unit> units)
+    {
+        float minDistance = (units[0].transform.position - transform.position).sqrMagnitude;
+        Unit target = units[0];
+        foreach (var unit in units)
+        {
+            float unitDistanceToTower = (unit.transform.position - transform.position).sqrMagnitude;
+            if (unitDistanceToTower <= minDistance && _targetType.Equals(unit.Type))
+            {
+                minDistance = unitDistanceToTower;
+                target = unit;
+            }
+            
+        }
+
+        return target;
     }
     
     

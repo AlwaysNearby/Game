@@ -19,12 +19,12 @@ public class RocketLauncher : AttackTower, IChoosable
 
         Attack.OnStartReload += () =>
         {
-            SetNewSprite(level.ReloadSprite[level.Current]);
+            SetNewSprite(level.reloadSprite[level.current]);
         };
 
         Attack.OnEndReload += () =>
         {
-            SetNewSprite(level.LevelSprite[level.Current]);
+            SetNewSprite(level.levelSprite[level.current]);
         };
 
     }

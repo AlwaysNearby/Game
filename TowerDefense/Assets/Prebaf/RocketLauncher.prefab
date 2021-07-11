@@ -114,27 +114,34 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  buildCost: 50
   level:
-    Max: 3
-    Current: 0
-    CharacteristicsTower:
+    max: 3
+    current: 0
+    characteristicsTower:
     - Ammo: 2
-      Damage: 15
-      ReloadTime: 3
-      ShootingInterval: 0.8
-    - Ammo: 2
-      Damage: 30
+      Damage: 20
       ReloadTime: 2
-      ShootingInterval: 0.6
+      ShootingInterval: 1
+      upgradeCost: 100
+      saleCost: 25
+    - Ammo: 2
+      Damage: 40
+      ReloadTime: 3
+      ShootingInterval: 0.5
+      upgradeCost: 200
+      saleCost: 50
     - Ammo: 1
-      Damage: 80
-      ReloadTime: 5
-      ShootingInterval: 0
-    LevelSprite:
+      Damage: 100
+      ReloadTime: 4
+      ShootingInterval: 0.1
+      upgradeCost: 0
+      saleCost: 100
+    levelSprite:
     - {fileID: 21300000, guid: 01f82908be6d6d74c83de3efd05a03db, type: 3}
     - {fileID: 21300000, guid: 98f360c9860df4541b1df82ff35f2d41, type: 3}
     - {fileID: 21300000, guid: 4f1785c71d750d74484a071a4c142764, type: 3}
-    ReloadSprite:
+    reloadSprite:
     - {fileID: 21300000, guid: 40464eab561504f4b82b010215a3fea1, type: 3}
     - {fileID: 21300000, guid: 640c4dc76919a3b4fa3c9db340b38d52, type: 3}
     - {fileID: 21300000, guid: c483ad483303ce34e887551698d522c9, type: 3}
@@ -233,20 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592d14669bfe6774b9af6c175811ab38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1041698679661774182}
-        m_MethodName: IncreaseLevel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  _tower: {fileID: 1041698679661774182}
 --- !u!61 &7370324440126821723
 BoxCollider2D:
   m_ObjectHideFlags: 0
