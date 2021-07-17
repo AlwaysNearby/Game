@@ -1,25 +1,61 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISwitcherState
 {
 
+    private BaseState[] _allStates;
+    private BaseState _currentState;
 
-    [SerializeField] private float _speed;
-
-
-
-    public void StopMovement()
+    private void Awake()
     {
-        _speed = 0f;
+        _allStates = new BaseState[]
+        {
+            new PlayerIdle(this, GetComponent<Animator>(), new Input()),
+            new PlayerMover( this, GetComponent<Animator>(), GetComponent<MovePointHepler>(), 2.5f),
+            new PlayerShooter(this, GetComponent<Animator>(), new Input(), GetComponent<ShootingHandler>())
+        };
+    }
+
+
+    private void OnEnable()
+    {
+        GetComponent<MovePointHepler>().OnFinish += StopAllStates;
+    }
+
+
+    private void OnDisable()
+    {
+        GetComponent<MovePointHepler>().OnFinish += StopAllStates;
+    }
+
+
+    private void Start()
+    {
+        
+        _currentState = _allStates[0];
+        _currentState.Start();
+
     }
     
-    
-
-    
-    void Update()
+    public void SwitchState<T>() where T : BaseState
     {
-        transform.Translate(transform.right * _speed * Time.deltaTime);
+        var state = _allStates.FirstOrDefault(s => s is T);
+        _currentState.Stop();
+        _currentState = state;
+        _currentState.Start();
     }
+
+
+    private void StopAllStates()
+    {
+        foreach (var state in _allStates)
+        {
+            state.Stop();
+        }
+    }
+    
 }
