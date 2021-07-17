@@ -20,6 +20,11 @@ public class Bullet : MonoBehaviour
     }
 
 
+    private void Start()
+    {
+        Destroy(this.gameObject, 5f);
+    }
+
 
     public void SetVelocity(Vector3 direction)
     {

@@ -5,29 +5,25 @@ using UnityEngine;
 
 public class MovePointHepler : MonoBehaviour
 {
-    [SerializeField] private Transform[] _wayPoints;
-    
-    
-    
-    
-
+    private Transform[] _wayPoints;
     private int _currentPosition;
-
     
-    
-
     public event Action OnEntryEndPoint;
     public event Action OnFinish;
+
+
 
     private void Start()
     {
         _currentPosition = 0;
+        _wayPoints = FindObjectOfType<WayPoints>().GetComponent<WayPoints>().Points;
+        transform.position = _wayPoints[_currentPosition].position;
+        transform.LookAt(_wayPoints[_currentPosition + 1]);
     }
 
 
     public void Move(float speed)
     {
-        
         StartCoroutine(Movement(speed));
     }
 
