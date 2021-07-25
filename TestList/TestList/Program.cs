@@ -17,7 +17,6 @@ namespace TestList
 
     class ListRand
     {
-       
         public ListNode Head;
         public ListNode Tail;
         public int Count;
@@ -46,7 +45,6 @@ namespace TestList
 
         public void Deserialize(FileStream s)
         {
-
             Dictionary<int, ListNode> result = new Dictionary<int, ListNode>();
 
             using(StreamReader r = new StreamReader(s))
@@ -79,10 +77,8 @@ namespace TestList
                 Tail = tail;
                 Count = data.Count();
 
- 
                 var iterator = data.GetEnumerator();
                 iterator.MoveNext();
-
 
                 for(var i =0; i < result.Count; i++)
                 {
@@ -91,12 +87,9 @@ namespace TestList
                     if(currentData[1] != "" && currentData[1] != "null")
                     {
                         result[i].Rand = result[Convert.ToInt32(iterator.Current[1])];
- 
-
                     }
                     iterator.MoveNext();
                 }
-
             }
         }
     }
@@ -110,7 +103,7 @@ namespace TestList
             ListNode head = new ListNode();
             ListNode tail = new ListNode();
             ListNode Rand = new ListNode();
-            int count = 10;
+            int count = 15;
             tail = head;
 
             head.Data = rnd.Next(0, 25).ToString();
@@ -124,7 +117,7 @@ namespace TestList
                 node.Prev = tail;
                 tail = node;
 
-                node.Data = Convert.ToString(Convert.ToChar(rnd.Next(32, 128)));
+                node.Data = Convert.ToString(Convert.ToChar(rnd.Next(16, 128)));
                 nodes.Add(node);
             }
 
@@ -153,7 +146,8 @@ namespace TestList
             var exePath = AppDomain.CurrentDomain.BaseDirectory;
             var path = Path.Combine(exePath, "ListRand.txt");
 
-            FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fs = new FileStream(path, FileMode.OpenOrCreate);
+            fs.SetLength(0);
 
             listRand.Serialize(fs);
 
@@ -163,6 +157,9 @@ namespace TestList
 
             var testList = new ListRand();
             testList.Deserialize(fs);
+
+            fs.Dispose();
+            fs.Close();
 
             var n = testList.Tail;
 
