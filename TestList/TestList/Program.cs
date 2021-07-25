@@ -17,23 +17,27 @@ namespace TestList
 
     class ListRand
     {
+       
         public ListNode Head;
         public ListNode Tail;
         public int Count;
 
         public void Serialize(FileStream s)
         {
-            List<ListNode> nodes = new List<ListNode>();
+            Dictionary<ListNode, int> nodes = new Dictionary<ListNode, int>();
+            int index = 0;
             for(var node = Head; node != null; node = node.Next)
             {
-                nodes.Add(node);
+                nodes.Add(node, index);
+                index += 1;
             }
-
+           
             using (StreamWriter w = new StreamWriter(s))
             {
-                foreach (var node in nodes)
+                for (var node = Head; node != null; node = node.Next)
                 {
-                    w.WriteLine(node.Data + " " + nodes.IndexOf(node.Rand).ToString());
+                    var rand = node.Rand == null ? "null" : nodes[node.Rand].ToString();
+                    w.WriteLine(node.Data + '\n' + rand);
                 }
             }
             
@@ -43,43 +47,56 @@ namespace TestList
         public void Deserialize(FileStream s)
         {
 
-            List<ListNode> nodes = new List<ListNode>();
-            List<int> randNode = new List<int>();
-            Head = new ListNode();
-            Tail = new ListNode();
-
-            Head = Tail;
+            Dictionary<int, ListNode> result = new Dictionary<int, ListNode>();
 
             using(StreamReader r = new StreamReader(s))
             {
                 string line;
 
-                while((line = r.ReadLine()) != null)
+                var file = r.ReadToEnd();
+                var str = file.Replace("\r", string.Empty).Trim().Split('\n');
+                int counter = 2;
+                var data = str.GroupBy(_ => counter++ / 2).Select(v => v.ToArray());
+                int index = 0;
+
+                ListNode head = new ListNode();
+                ListNode tail = new ListNode();
+
+                head = tail;
+
+                foreach(var d in data)
                 {
-                    if (!line.Equals(""))
+                    ListNode temp = new ListNode();
+                    result.Add(index, tail);
+                    tail.Data = d[0];
+                    tail.Next = temp;
+                    temp.Prev = tail;
+                    tail = temp;
+                    index += 1;
+                }
+
+                Head = head;
+                Tail = tail;
+                Count = data.Count();
+
+ 
+                var iterator = data.GetEnumerator();
+                iterator.MoveNext();
+
+
+                for(var i =0; i < result.Count; i++)
+                {
+                    var currentData = iterator.Current;
+
+                    if(currentData[1] != "" && currentData[1] != "null")
                     {
-                        ListNode node = new ListNode();
-                        var data = line.Split(' ');
+                        result[i].Rand = result[Convert.ToInt32(iterator.Current[1])];
+ 
 
-                        Tail.Data = data[0];
-                        nodes.Add(Tail);
-                        randNode.Add(Convert.ToInt32(data[1]));
-                        Tail.Next = node;
-                        node.Prev = Tail;
-                        Tail = node;
                     }
-                    
+                    iterator.MoveNext();
                 }
 
-                Tail = Tail.Prev;
-                Tail.Next = null;
-
-                for(var i = 0; i < nodes.Count; i++)
-                {
-                    nodes[i].Rand = nodes[randNode[i]];
-                }
-
-                Count = nodes.Count;
             }
         }
     }
@@ -106,7 +123,8 @@ namespace TestList
                 tail.Next = node;
                 node.Prev = tail;
                 tail = node;
-                node.Data = rnd.Next(0, 25).ToString();
+
+                node.Data = Convert.ToString(Convert.ToChar(rnd.Next(32, 128)));
                 nodes.Add(node);
             }
 
@@ -114,17 +132,28 @@ namespace TestList
             listRand.Tail = tail;
             listRand.Count = count;
 
+            var index = 0;
 
             for(var node = head; node != null; node = node.Next)
             {
-                node.Rand = nodes[rnd.Next(0, count)];
+
+                if(index % 2 == 0)
+                {
+                    node.Rand = null;
+                }
+                else
+                {
+                    node.Rand = nodes[rnd.Next(0, nodes.Count)];
+                }
+
+                index += 1;
                
             }
 
             var exePath = AppDomain.CurrentDomain.BaseDirectory;
             var path = Path.Combine(exePath, "ListRand.txt");
 
-            FileStream fs = new FileStream(path, FileMode.OpenOrCreate);
+            FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
 
             listRand.Serialize(fs);
 
@@ -137,15 +166,23 @@ namespace TestList
 
             var n = testList.Tail;
 
-            Console.Write(n.Data + " ");
 
-            n = n.Prev;
+            fs.Close();
+            n = listRand.Head;
 
             while (n != null)
             {
-                Console.Write(n.Data + " ");
-               
-                n = n.Prev;
+
+               if(n.Rand != null)
+               {
+                    Console.WriteLine(n.Data + " " + n.Rand.Data);
+               }
+               else
+               {
+                    Console.WriteLine(n.Data);
+               }
+
+                n = n.Next;
             }
 
             Console.Read();
