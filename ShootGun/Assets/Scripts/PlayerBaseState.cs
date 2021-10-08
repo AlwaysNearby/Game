@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.EventSystems;
 
 namespace DefaultNamespace
 { 
     public abstract class PlayerBaseState
     {
         protected readonly ISwitcherState Switcher;
-        protected readonly TouchScroll Input;
-        public PlayerBaseState(ISwitcherState switcher, TouchScroll input)
+        protected readonly AnimatorController AnimatorController;
+        protected readonly Touch Input;
+        public PlayerBaseState(ISwitcherState switcher, AnimatorController animatorController, Touch input)
         {
             Switcher = switcher;
+            AnimatorController = animatorController;
             Input = input;
         }
         
         public abstract void Update();
 
-        public abstract void Enable();
+        public abstract void Start();
         
-        public abstract void Disable();
+        public abstract void Stop();
     }
 }

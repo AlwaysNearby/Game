@@ -1,34 +1,38 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
 
+[RequireComponent(typeof(AnimatorController), typeof(ShootingHepler))]
 public class Player : MonoBehaviour, ISwitcherState
 {
+    [SerializeField] private ActivatorModeAttack _activator;
+    [SerializeField] private Touch _input;
+    [SerializeField] private Weapon _gun;
 
     private PlayerBaseState _currentState;
     private List<PlayerBaseState> _allStates;
 
     private void Awake()
     {
-        var input = FindObjectOfType<TouchScroll>();
-        var animator = GetComponent<Animator>();
+        var animationConroller = GetComponent<AnimatorController>();
+
         _allStates = new List<PlayerBaseState>()
         {
-            new PlayerIdle(this, input, animator),
-            new PlayerTurn(this, input, animator),
-            new PlayerMover(this, input, animator, transform, 3),
+            new PlayerIdle(this, _input, animationConroller, _activator),
+            new PlayerTurn(this, _input, animationConroller),
+            new PlayerMover(this, _input, animationConroller, transform, 3),
+            new PlayerShooter(this, _input, animationConroller, _activator, _gun, GetComponent<ShootingHepler>()),
         };
     }
 
-    void Start()
-    {
+
+    private void Start()
+    { 
         _currentState = _allStates[0];
-        _currentState.Enable();
+        _currentState.Start();
     }
 
-    void Update()
+    private void Update()
     {
         _currentState.Update();
     }
@@ -36,8 +40,8 @@ public class Player : MonoBehaviour, ISwitcherState
     public void Switch<T>() where T : PlayerBaseState
     {
         var state = _allStates.Find(s => s is T);
-        _currentState.Disable();
+        _currentState.Stop();
         _currentState = state;
-        _currentState.Enable();
+        _currentState.Start();
     }
 }

@@ -1,33 +1,37 @@
-using Assets.Scripts;
 using DefaultNamespace;
 using UnityEngine;
 
 public class PlayerIdle : PlayerBaseState
 {
-    private IdleAnimation _idleController;
-    public PlayerIdle(ISwitcherState switcher, TouchScroll input, Animator animator) : base(switcher, input)
+    private ActivatorModeAttack _attackMode;
+
+    public PlayerIdle(ISwitcherState switcher, Touch input, AnimatorController animator, ActivatorModeAttack activator) : base(switcher, animator, input)
     {
-        _idleController = new IdleAnimation(animator);
+        _attackMode = activator;
     }
+
+    public override void Start()
+    {
+        AnimatorController.SetBool(Parameter.Idle, true);
+        Input.Enable();
+    }
+
 
     public override void Update()
-    {
-       if (!Input.Direction.Equals(Vector2Int.zero))
+    {  
+       if(_attackMode.IsActive)
        {
-            Switcher.Switch<PlayerTurn>();
+            Switcher.Switch<PlayerShooter>();
        }
-
+       else if(Input.ScrollDirection != Vector2Int.zero)
+       {
+            Switcher.Switch<PlayerTurn>();     
+       }
     }
 
-    public override void Enable()
+    public override void Stop()
     {
-       _idleController.SetBool(Parametr.Idle, true);
-       Input.Enable();
-    }
-
-    public override void Disable()
-    {
-        _idleController.SetBool(Parametr.Idle, false);
-       Input.Disable();
+        AnimatorController.SetBool(Parameter.Idle, false);
+        Input.Disable();
     }
 }

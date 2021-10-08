@@ -1,22 +1,31 @@
-using Assets.Scripts;
 using DefaultNamespace;
 using UnityEngine;
 
 public class PlayerMover : PlayerBaseState
 {
     private int _stepBetweenLines;
-    private Vector3 _direction;
     private Transform _self;
     private Vector3 _destination;
-    private WalkAnimation _walkController;
-    
-
-    public PlayerMover(ISwitcherState switcher, TouchScroll input, Animator animator, Transform self, int stepBetweenLines) : base(switcher, input)
+    public PlayerMover(ISwitcherState switcher, Touch input, AnimatorController animator, Transform self, int stepBetweenLines) : base(switcher, animator, input)
     {
         _stepBetweenLines = stepBetweenLines;
-        _direction = Vector3.zero;
         _self = self;
-        _walkController = new WalkAnimation(animator);
+    }
+
+    public override void Start()
+    {
+        var direction = Vector3.right * Input.ScrollDirection.x;
+
+        if (IsObstacleIn(direction))
+        {
+            Switcher.Switch<PlayerTurn>();
+            AnimatorController.SetTrigger(Parameter.IsObstacle);
+        }
+        else
+        {
+            AnimatorController.SetBool(Parameter.Walk, true);
+            _destination = _self.position + direction * _stepBetweenLines;
+        }
     }
 
     public override void Update()
@@ -32,31 +41,13 @@ public class PlayerMover : PlayerBaseState
             
     }
 
-    public override void Enable()
-    {
-        _direction = Vector3.right * Input.Direction.x * _stepBetweenLines;
-        
-        if (AttemptStep(_direction))
-        {
-            Switcher.Switch<PlayerTurn>();
-            _walkController.SetTrigger(Parametr.IsObstacle);
-        }
-        else
-        {
-            _walkController.SetBool(Parametr.Walk, true);
-            _destination = _self.position + _direction;
-        }
-    }
-
-    public override void Disable()
-    {
-        _direction = Vector3.zero;
+    public override void Stop()
+    { 
         _destination = Vector3.zero;
-        _walkController.SetBool(Parametr.Walk, false);
+        AnimatorController.SetBool(Parameter.Walk, false);
     }
-
-    private bool AttemptStep(Vector3 direction)
+    private bool IsObstacleIn(Vector3 direction)
     {
-        return Physics.Raycast(_self.position, direction, _stepBetweenLines);
+        return Physics.Raycast(_self.position, direction, (float)_stepBetweenLines);
     }
 }

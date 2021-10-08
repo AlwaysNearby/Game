@@ -1,28 +1,26 @@
-﻿using Assets.Scripts;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using DefaultNamespace;
 
-namespace DefaultNamespace
+public class PlayerTurn : PlayerBaseState
 {
-    
-    public class PlayerTurn : PlayerBaseState
-    {
         private LookDirection _orientation;
-        private Timer _timer;
-        private TurnAnimation _turnController;
-        public PlayerTurn(ISwitcherState switcher, TouchScroll input, Animator animator) : base(switcher, input)
+        private Timer _turnTime;
+        public PlayerTurn(ISwitcherState switcher, Touch input, AnimatorController animator) : base(switcher, animator, input)
         {
-            _orientation = LookDirection.Idle;
-            _turnController = new TurnAnimation(animator);
-            _timer = new Timer(_turnController.GetAnimationTime(TurnType.LTurn));
+            _orientation = LookDirection.Forward;
+            _turnTime = new Timer(animator.GetAnimationTime("LTurn"));
+        }
+        public override void Start()
+        {
+            AnimatorController.SetBool(Parameter.Turn, true);
+            AnimatorController.SetInteger(Parameter.Direction, Input.ScrollDirection.x);
+            _turnTime.Start();
         }
 
         public override void Update()
         {
-            if (_timer.IsOver())
+            if (_turnTime.IsOver())
             {
-                if (_orientation.Equals(LookDirection.Idle))
+                if(_orientation == LookDirection.Forward)
                 {
                     Switcher.Switch<PlayerMover>();
                     _orientation = LookDirection.Side;
@@ -30,23 +28,13 @@ namespace DefaultNamespace
                 else
                 {
                     Switcher.Switch<PlayerIdle>();
-                    _orientation = LookDirection.Idle;
+                    _orientation = LookDirection.Forward;
                 }
             }
         }
-
-        public override void Enable()
+        public override void Stop()
         {
-            _turnController.SetBool(Parametr.Turn, true);
-            _turnController.SetInteger(Parametr.Direction, Input.Direction.x);
-            _timer.Start();
+            AnimatorController.SetBool(Parameter.Turn, false);
+            AnimatorController.SetInteger(Parameter.Direction, 0);
         }
-
-        public override void Disable()
-        {
-            _turnController.SetBool(Parametr.Turn, false);
-            _turnController.SetInteger(Parametr.Direction, 0);
-        }
-        
-    }
 }
