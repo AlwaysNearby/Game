@@ -9,11 +9,11 @@ public class Knife : Weapon
         base.Awake();
     }
 
-    public override void ShotTorwads(Vector3 position)
+    public override void ShotTorwads(Vector3 point)
     {
         if(TryShot())
         {
-            Shot(position);
+            Shot(point);
         }
     }
 

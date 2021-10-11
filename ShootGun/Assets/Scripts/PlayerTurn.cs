@@ -4,7 +4,7 @@ public class PlayerTurn : PlayerBaseState
 {
         private LookDirection _orientation;
         private Timer _turnTime;
-        public PlayerTurn(ISwitcherState switcher, Touch input, AnimatorController animator) : base(switcher, animator, input)
+        public PlayerTurn(ISwitcherState switcher, Input input, AnimatorController animator) : base(switcher, animator, input)
         {
             _orientation = LookDirection.Forward;
             _turnTime = new Timer(animator.GetAnimationTime("LTurn"));

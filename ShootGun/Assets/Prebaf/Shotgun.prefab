@@ -96,9 +96,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ammo:
-    _numberOfShots: 0
-  _reloadTime: 5
-  _reloadBetweenShot: 0.75
+    _numberOfShots: 1
+  _reloadTime: 0.25
+  _reloadBetweenShot: 0.2
   _prebaf: {fileID: 525366223361366085, guid: 344dcaa3c707efc47900d5d3ad7767ce, type: 3}
   _projectileSpawn: {fileID: 0}
 --- !u!114 &5712299005472872366

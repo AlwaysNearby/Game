@@ -3,11 +3,8 @@ using UnityEngine;
 
 public class PlayerIdle : PlayerBaseState
 {
-    private ActivatorModeAttack _attackMode;
-
-    public PlayerIdle(ISwitcherState switcher, Touch input, AnimatorController animator, ActivatorModeAttack activator) : base(switcher, animator, input)
+    public PlayerIdle(ISwitcherState switcher, Input input, AnimatorController animator) : base(switcher, animator, input)
     {
-        _attackMode = activator;
     }
 
     public override void Start()
@@ -19,13 +16,13 @@ public class PlayerIdle : PlayerBaseState
 
     public override void Update()
     {  
-       if(_attackMode.IsActive)
-       {
-            Switcher.Switch<PlayerShooter>();
-       }
-       else if(Input.ScrollDirection != Vector2Int.zero)
+       if(Input.ScrollDirection != Vector2Int.zero)
        {
             Switcher.Switch<PlayerTurn>();     
+       }
+       else if(Input.IsActiveAttack)
+       { 
+            Switcher.Switch<PlayerShooter>();
        }
     }
 

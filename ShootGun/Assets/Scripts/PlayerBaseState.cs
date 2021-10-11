@@ -7,8 +7,8 @@ namespace DefaultNamespace
     {
         protected readonly ISwitcherState Switcher;
         protected readonly AnimatorController AnimatorController;
-        protected readonly Touch Input;
-        public PlayerBaseState(ISwitcherState switcher, AnimatorController animatorController, Touch input)
+        protected readonly Input Input;
+        public PlayerBaseState(ISwitcherState switcher, AnimatorController animatorController, Input input)
         {
             Switcher = switcher;
             AnimatorController = animatorController;

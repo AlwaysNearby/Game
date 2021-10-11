@@ -5,8 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(AnimatorController), typeof(ShootingHepler))]
 public class Player : MonoBehaviour, ISwitcherState
 {
-    [SerializeField] private ActivatorModeAttack _activator;
-    [SerializeField] private Touch _input;
+    [SerializeField] private Input _input;
     [SerializeField] private Weapon _gun;
 
     private PlayerBaseState _currentState;
@@ -18,10 +17,10 @@ public class Player : MonoBehaviour, ISwitcherState
 
         _allStates = new List<PlayerBaseState>()
         {
-            new PlayerIdle(this, _input, animationConroller, _activator),
+            new PlayerIdle(this, _input, animationConroller),
             new PlayerTurn(this, _input, animationConroller),
             new PlayerMover(this, _input, animationConroller, transform, 3),
-            new PlayerShooter(this, _input, animationConroller, _activator, _gun, GetComponent<ShootingHepler>()),
+            new PlayerShooter(this, _input, animationConroller, _gun, GetComponent<ShootingHepler>()),
         };
     }
 

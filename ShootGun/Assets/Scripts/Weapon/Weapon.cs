@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ShootingHepler), typeof(ShootingHepler))]
+[RequireComponent(typeof(ShootingHepler))]
 public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] private Ammo _ammo;
@@ -36,7 +36,7 @@ public abstract class Weapon : MonoBehaviour
         _timeReload.OnEnd -= _ammo.Fill;
     }
 
-    public abstract void ShotTorwads(Vector3 position);
+    public abstract void ShotTorwads(Vector3 point);
 
     protected bool TryShot()
     {
@@ -59,12 +59,13 @@ public abstract class Weapon : MonoBehaviour
     }
 
 
-    protected void Shot(Vector3 position)
+    protected void Shot(Vector3 point)
     {
-        var direction = position - _projectileSpawn.position;
-        Quaternion lookDirection = Quaternion.LookRotation(direction, Vector3.up);
+        var direction = (point - _projectileSpawn.position).normalized;
+
+        Quaternion lookDirection = Quaternion.LookRotation(direction);
         Projectile projectile = Instantiate(_prebaf, _projectileSpawn.position, lookDirection);
-        projectile.SetDirection(direction);
+        projectile.Direction = direction;
 
         _ammo.Reduce();
         _timeBetweenShots.Start();

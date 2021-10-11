@@ -6,7 +6,7 @@ public class PlayerMover : PlayerBaseState
     private int _stepBetweenLines;
     private Transform _self;
     private Vector3 _destination;
-    public PlayerMover(ISwitcherState switcher, Touch input, AnimatorController animator, Transform self, int stepBetweenLines) : base(switcher, animator, input)
+    public PlayerMover(ISwitcherState switcher, Input input, AnimatorController animator, Transform self, int stepBetweenLines) : base(switcher, animator, input)
     {
         _stepBetweenLines = stepBetweenLines;
         _self = self;
@@ -48,6 +48,7 @@ public class PlayerMover : PlayerBaseState
     }
     private bool IsObstacleIn(Vector3 direction)
     {
-        return Physics.Raycast(_self.position, direction, (float)_stepBetweenLines);
+        Debug.DrawRay(_self.position, direction * _stepBetweenLines, Color.red, 1f);
+        return Physics.Raycast(_self.position, direction, _stepBetweenLines);
     }
 }

@@ -5,9 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(ShotHandler))]
 public class Projectile : MonoBehaviour
 {
+    public Vector3 Direction { private get; set; } = Vector3.zero;
+
     [SerializeField] private float _speed;
 
-    private Vector3 _direction;
     private ShotHandler _handler;
 
     private void Awake()
@@ -15,14 +16,10 @@ public class Projectile : MonoBehaviour
         _handler = GetComponent<ShotHandler>();
     }
 
-    public void SetDirection(Vector3 direction)
-    {
-        _direction = direction.normalized;
-    }
 
     private void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, transform.position  +  _direction * _speed, Time.deltaTime * _speed);
+        transform.position = Vector3.MoveTowards(transform.position, transform.position  +  Direction * _speed, Time.deltaTime * _speed);
     }
 
     private void OnTriggerEnter(Collider other)

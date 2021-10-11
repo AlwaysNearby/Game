@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pistol : Weapon
+public class Bandit : Enemy
 {
     protected override void Awake()
     {
         base.Awake();
     }
 
-    public override void ShotTorwads(Vector3 point)
+    private void Update()
     {
-        if (TryShot())
+        if (TryMove(transform.forward))
         {
-            Shot(point);
+            Move(transform.forward);
         }
     }
+
+    
 }

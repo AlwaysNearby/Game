@@ -3,13 +3,11 @@ using UnityEngine;
 
 public class PlayerShooter : PlayerBaseState
 {
-    private ActivatorModeAttack _attackMode;
     private Weapon _gun;
     private ShootingHepler _hepler;
 
-    public PlayerShooter(ISwitcherState switcher, Touch input, AnimatorController animator, ActivatorModeAttack activator, Weapon gun, ShootingHepler helper) : base(switcher, animator, input)
+    public PlayerShooter(ISwitcherState switcher, Input input, AnimatorController animator, Weapon gun, ShootingHepler helper) : base(switcher, animator, input)
     {
-        _attackMode = activator;
         _gun = gun;
         _hepler = helper;
     }
@@ -26,27 +24,24 @@ public class PlayerShooter : PlayerBaseState
 
        if (clickPosition != Vector2.zero)
        {
-            var position = _hepler.ÑonvertingPixelCoordinates(clickPosition);
-            _gun.ShotTorwads(position);
+            var point = _hepler.ÑonvertingPixelCoordinates(clickPosition);
+
+            if (point == Vector3.zero)
+                return;
+
+            _gun.ShotTorwads(point);
        }
 
 
-       if(!_attackMode.IsActive)
-       { 
-          Switcher.Switch<PlayerIdle>();
+       if(!Input.IsActiveAttack)
+       {
+            Switcher.Switch<PlayerIdle>();
        }
+       
     }
-
-
     public override void Stop()
     {
         AnimatorController.SetBool(Parameter.Shoot, false);
         Input.Disable();
-    }
-
-
-    private void ShotTowards(Ray ray)
-    {
-        
     }
 }

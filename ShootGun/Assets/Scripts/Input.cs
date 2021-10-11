@@ -1,17 +1,19 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System;
 
-public class Touch : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDownHandler, IPointerUpHandler
+public class Input : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
+    public event Action OnEnable;
+    public event Action OnDisable;
+
+    private ActivatorModeAttack _activator;
     private Vector2Int _scrollDirection;
     private Vector2 _pressPosition;
     private bool _isActiveInput = false;
 
-
     public Vector2Int ScrollDirection => _scrollDirection;
+    public bool IsActiveAttack => _activator.IsActive;
     public Vector2 PressPosition
     {
         get
@@ -19,6 +21,12 @@ public class Touch : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDow
             return _pressPosition;
         }
     }
+
+    private void Awake()
+    {
+        _activator = GetComponentInChildren<ActivatorModeAttack>();
+    }
+
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -53,10 +61,15 @@ public class Touch : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDow
     {
         _isActiveInput = true;
         _scrollDirection = Vector2Int.zero;
+
+
+        OnEnable?.Invoke();
     }
 
     public void Disable()
     {
         _isActiveInput = false;
+
+        OnDisable?.Invoke();
     }
 }
