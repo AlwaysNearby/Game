@@ -2,27 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotGun : Weapon
+public class ShotGun : ProjectileWeapon
 {
     private const float _deegresInACircle = 360f; 
-
-    protected override void Awake()
+    
+    public override void ShotTowards(Vector3 point)
     {
-        base.Awake();
-    }
+        int numberOfTuples = Random.Range(3, 6);
 
-    public override void ShotTorwads(Vector3 point)
-    {
-        if (TryShot())
+        int numberOfPoints = numberOfTuples + 1;
+        
+        Vector3[] points = new Vector3[numberOfPoints];
+        Vector3 offset = Vector3.up;
+        Quaternion rotation = Quaternion.Euler(0, 0, _deegresInACircle / numberOfTuples);
+
+        for (int i = 0; i < numberOfTuples; i++)
         {
-            int numberOfTuples = Random.Range(3, 6);
-            Vector3 offset = Vector3.up;
-            float angleStep = _deegresInACircle / numberOfTuples;
-            Quaternion rotation = Quaternion.Euler(0, 0, angleStep);
-
-            Shot(point);
-
+            points[i] = point + offset;
+            offset = rotation * offset;
         }
 
+        points[numberOfPoints - 1] = point;
+        
+        AddShot(points);
     }
 }

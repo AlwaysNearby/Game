@@ -1,20 +1,25 @@
 ﻿using UnityEngine;
 using System;
+using UnityEditor.Timeline.Actions;
 
 namespace DefaultNamespace
 {
+    [System.Serializable]
     public class Timer
     {
         public event Action OnEnd;
 
-        private float _start;
-        private float _duration;
-        private bool _isStart;
+        [SerializeField] private float _duration;
         
+        private float _start;
+        private bool _isStart;
+
         public Timer(float duration)
         {
             _duration = duration;
+            _isStart = false;
         }
+        
         public void Start()
         {
             _start = Time.time;
@@ -25,8 +30,10 @@ namespace DefaultNamespace
         public bool IsOver()
         {
             if (_isStart == false)
+            {
                 return true;
-
+            }
+            
             if (Time.time - _start > _duration)
             {
                 OnEnd?.Invoke();

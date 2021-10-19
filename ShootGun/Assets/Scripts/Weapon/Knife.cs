@@ -2,19 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Knife : Weapon
+public class Knife : ProjectileWeapon
 {
-    protected override void Awake()
+    
+    
+    public override void ShotTowards(Vector3 point)
     {
-        base.Awake();
-    }
-
-    public override void ShotTorwads(Vector3 point)
-    {
-        if(TryShot())
-        {
-            Shot(point);
-        }
+        AddShot(point);
     }
 
 }

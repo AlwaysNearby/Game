@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a9bc4876cabb147add09456e223e6f, type: 3}
+  m_Name: PistolConfig
+  m_EditorClassIdentifier: 
+  _shoot: {fileID: 7400000, guid: f0f73466367c8a64f906c50bae10070c, type: 2}
+  Prebaf: {fileID: 8727582533313748925, guid: a12399b5fe55d6b4f84f9c24aadd9bed, type: 3}
+  Rotation: {x: 349.5967, y: 266.60306, z: 266.68445}
+  Position: {x: -0.052, y: 0.045, z: -0.045}
+  TimeReload: 1
+  TimeBetweenShot: 0.25

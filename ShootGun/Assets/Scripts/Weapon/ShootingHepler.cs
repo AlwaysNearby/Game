@@ -4,46 +4,32 @@ using UnityEngine;
 
 public class ShootingHepler : MonoBehaviour
 {
-    [SerializeField] private List<LayerMask> _availableTargets;
+    [SerializeField] private LayerMask _availableTarget;
+    [SerializeField] private LayerMask _ignoreCollider;
 
     private Camera _mainCamera;
+    private RaycastHit _hit;
 
     private void Awake()
     {
         _mainCamera = Camera.main;
     }
 
-    public Vector3 ÑonvertingPixelCoordinates(Vector2 point)
+    public Vector3 Ð¡onvertingPixelCoordinates(Vector2 point)
     {
         Ray ray = _mainCamera.ScreenPointToRay(point);
-        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction);
 
-        foreach (var hitInfo in hits)
+        if (Physics.Raycast(ray, float.MaxValue, _ignoreCollider))
         {
-            if (CheckCollider(hitInfo.collider))
-            {
-                return hitInfo.point;
-            }
+            return Vector3.zero;
         }
+
+        if (Physics.Raycast(ray, out _hit, float.MaxValue, _availableTarget))
+        {
+            return _hit.point;
+        }
+        
 
         return Vector3.zero;
-    }
-
-
-    private bool CheckCollider(Collider collider)
-    {
-        int layer = collider.gameObject.layer;
-
-        int layerMask = (int)Mathf.Pow(2, layer);
-
-        foreach(var ignoreMask in _availableTargets)
-        {
-            if(layerMask.Equals(ignoreMask.value))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

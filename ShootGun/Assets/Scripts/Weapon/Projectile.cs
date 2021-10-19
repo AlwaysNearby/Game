@@ -2,28 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(ShotHandler))]
+[RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
-    public Vector3 Direction { private get; set; } = Vector3.zero;
 
     [SerializeField] private float _speed;
-
-    private ShotHandler _handler;
-
-    private void Awake()
-    {
-        _handler = GetComponent<ShotHandler>();
-    }
-
-
+    [SerializeField] private float _damage;
+    
+    
+    public Vector3 Direction { private get; set; } = Vector3.zero;
+    
     private void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, transform.position  +  Direction * _speed, Time.deltaTime * _speed);
     }
 
-    private void OnTriggerEnter(Collider other)
+
+    public void DamageAt(IDamageable target)
     {
-        _handler.Handle(other);
+        target.Damage(_damage);
     }
+
 }

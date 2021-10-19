@@ -4,23 +4,24 @@ using UnityEngine;
 [System.Serializable]
 public class Ammo
 {
-    [SerializeField] private int _numberOfShots;
+    private int _numberOfShots;
+    private int _currentCount;
 
-    private int _current—ount;
 
-    public int CurrentCount => _current—ount;
-    public void Init()
+    public Ammo(int countShot)
     {
-        _current—ount = _numberOfShots;
+        _numberOfShots = _currentCount = countShot;
     }
+    
+    public int CurrentCount => _currentCount;
 
     public void Reduce()
     {
-        _current—ount -= 1;
+        _currentCount -= 1;
     }
     
     public void Fill()
     {
-        _current—ount = _numberOfShots;
+        _currentCount = _numberOfShots;
     }
 }
