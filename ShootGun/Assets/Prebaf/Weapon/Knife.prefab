@@ -125,9 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 661e48e82a92aec40aa93c2cac5c3577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _countShot: 5
-  _prebaf: {fileID: 6026758700455926371, guid: 0b66b6d3e223b04489a696e09bd8b879, type: 3}
-  _projectileSpawn: {fileID: 4849629666073693110}
-  _reloadTimer:
+  ReloadTimer:
     _duration: 1
-  _shotAnimationEvent: {fileID: 0}
+  _projectileSpawn: {fileID: 4849629666073693110}
+  _prebaf: {fileID: 6026758700455926371, guid: 0b66b6d3e223b04489a696e09bd8b879, type: 3}
+  _countShot: 5

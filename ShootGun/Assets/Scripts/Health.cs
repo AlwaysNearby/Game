@@ -19,9 +19,13 @@ public class Health : MonoBehaviour, IDamageable
     public void Damage(float amountOfHarm)
     {
         _current -= amountOfHarm;
+
         if (_current <= 0)
         {
             OnDeath?.Invoke();
+            gameObject.SetActive(false);
+            Destroy(this.gameObject, 5f);
         }
     }
+    
 }

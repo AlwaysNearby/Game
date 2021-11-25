@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
 
-public class Border : MonoBehaviour, ITarget
+public class Border : MonoBehaviour
 {
    
 }

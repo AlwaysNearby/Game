@@ -8,19 +8,12 @@ namespace PlayerState
     {
         private ProjectileWeapon _gun;
         private ShootingHepler _hepler;
-        private bool _isAttack = false;
 
-        public PlayerShooter(ISwitcherState switcher, Input input, AnimatorController animator, Weapon gun, ShootingHepler helper, AttackAnimationEvent shotAnimationEvent) : base(switcher, animator, input)
+        public PlayerShooter(ISwitcherState switcher, Input input, AnimatorController animator, Weapon gun, ShootingHepler helper) : base(switcher, animator, input)
         {
             _gun = (ProjectileWeapon)gun;
             _hepler = helper;
-
-            shotAnimationEvent.OnEnd += () =>
-            {
-                AnimatorController.SetBool(ParameterPlayer.Attack, false);
-                _isAttack = false;
-            };  
-
+            
         }
 
         public override void Start()
@@ -37,12 +30,11 @@ namespace PlayerState
             {
                 var point = _hepler.СonvertingPixelCoordinates(clickPosition);
 
-                if (point == Vector3.zero)
+                if (point.Equals(Vector3.zero))
                 {
-                    AnimatorController.SetBool(ParameterPlayer.Attack, false);
                     return;
                 }
-
+                
                 Shot(point);
             }
        
@@ -65,7 +57,7 @@ namespace PlayerState
             {
                 _gun.ShotTowards(point);
 
-                AnimatorController.SetBool(ParameterPlayer.Attack, true);
+                AnimatorController.SetTrigger(ParameterPlayer.Attack);
 
             }
         }

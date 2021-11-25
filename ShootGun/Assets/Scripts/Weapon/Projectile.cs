@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +12,25 @@ public class Projectile : MonoBehaviour
     
     
     public Vector3 Direction { private get; set; } = Vector3.zero;
-    
+
+
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     private void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, transform.position  +  Direction * _speed, Time.deltaTime * _speed);
     }
 
 
-    public void DamageAt(IDamageable target)
+    private void DamageAt(IDamageable target)
     {
         target.Damage(_damage);
     }

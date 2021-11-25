@@ -12,27 +12,41 @@ public abstract class ProjectileWeapon : Weapon
 
     private List<Vector3> _positions;
     private Ammo _ammo;
-    private bool _isAttack = false;
 
     protected override void Awake()
     {
         base.Awake();
-        _ammo = new Ammo(_countShot);
         
+        _ammo = new Ammo(_countShot);
     }
     
-
-    private void OnEnable()
+    private void Start()
     {
+        AttackAnimationEvent.OnStart += () =>
+        {
+            _ammo.Reduce();
+        };
+
+        AttackAnimationEvent.OnEnd += () =>
+        {
+            if (_ammo.CurrentCount <= 0)
+            {
+                ReloadTimer.Start();
+            }
+        };
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
         ReloadTimer.OnEnd += _ammo.Fill;
-        AttackAnimationEvent.OnAttack += Shot;
     }
 
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         ReloadTimer.OnEnd -= _ammo.Fill;
-        AttackAnimationEvent.OnAttack -= Shot;
     }
 
 
@@ -45,26 +59,17 @@ public abstract class ProjectileWeapon : Weapon
             return false;
         }
 
-        if (_ammo.CurrentCount <= 0)
-        {
-            ReloadTimer.Start();
-            return false;
-        }
-        
         return true;
     }
     
 
     protected void AddShot(params Vector3[] point)
     {
-        if (_isAttack == false)
-        {
-            _positions = point.ToList();
-        }
+        _positions = point.ToList();
     }
 
-    
-    private void Shot()
+
+    protected override void Attack()
     {
         int count = _positions.Count;
 
@@ -81,6 +86,5 @@ public abstract class ProjectileWeapon : Weapon
         }
         
         _positions.Clear();
-        _ammo.Reduce();
     }
 }

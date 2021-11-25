@@ -23,7 +23,7 @@ namespace PlayerState
                 new PlayerIdle(this, _input, animationController),
                 new PlayerTurn(this, _input, animationController),
                 new PlayerMover(this, _input, animationController, transform, 3),
-                new PlayerShooter(this, _input, animationController, _gun, GetComponent<ShootingHepler>(), GetComponent<AttackAnimationEvent>()),
+                new PlayerShooter(this, _input, animationController, _gun, GetComponent<ShootingHepler>()),
             };
         }
 
