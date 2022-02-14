@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Pool
 {
-    public abstract class ObjectPool<T>: MonoBehaviour, IPoolElementGetter<T> where T : MonoBehaviour
+    public abstract class ObjectPool<T>: MonoBehaviour, IObjectPool<T> where T : MonoBehaviour
     {
         private class PoolElement
         {

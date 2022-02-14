@@ -26,7 +26,7 @@ namespace Player
 			_pixelCoordinateConverter.Init(new Plane(Vector3.up, Vector3.zero));
 			_trajectory.Init();
 			_bulletPool.Init();
-			_cannon.Init(_bulletPool);
+			_cannon.Init(_bulletPool, _trajectory);
 		}
 		
 		void Update()
@@ -34,9 +34,9 @@ namespace Player
 			Vector3 pointOnGround = _pixelCoordinateConverter.ProjectToGround(Input.mousePosition);
 			
 			_cannon.LookAt(pointOnGround);
-
-			_trajectory.Draw(pointOnGround);
-        
+			
+			_cannon.ShowTrajectoryBullet(pointOnGround);
+			
 			if(Input.GetMouseButtonDown(0))
 			{ 
 				_cannon.LaunchTo(pointOnGround);

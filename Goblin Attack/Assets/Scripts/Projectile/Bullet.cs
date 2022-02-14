@@ -9,7 +9,7 @@ namespace Projectile
     {
         private Rigidbody _selfBody;
         private Action<Bullet> _destroyed;
-        
+
         public void Init(Action<Bullet> destroyed)
 		{
             _selfBody = GetComponent<Rigidbody>();
@@ -17,13 +17,19 @@ namespace Projectile
 		}
 
         public void SetVelocity(Vector3 velocity)
-		{
-            _selfBody.velocity = velocity;
-		}
-
+        {
+	        _selfBody.velocity = velocity;
+        }
+        
         public void SetDeparturePosition(Vector3 position)
         {
 	        transform.position = position;
         }
+
+        private void FixedUpdate()
+        {
+	        
+        }
+        
     }
 }
