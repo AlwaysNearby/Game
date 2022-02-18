@@ -1,5 +1,4 @@
 ﻿using System;
-using Pool;
 using UnityEngine;
 using Projectile;
 
@@ -8,7 +7,6 @@ namespace Factories
 	public enum BulletType
 	{
 		Default,
-		Explosive,
 	}
 	public class BulletFactory : MonoBehaviour
 	{

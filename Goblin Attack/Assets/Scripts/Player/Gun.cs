@@ -1,3 +1,4 @@
+using System;
 using Factories;
 using Pool;
 using Projectile;
@@ -12,13 +13,23 @@ namespace Player
 		[SerializeField] private Transform _placeLaunch;
 		[SerializeField] private Trajectory _trajectory;
 		[SerializeField] private PlayerData _playerData;
+		[SerializeField] private GameObject _bulletStorage;
 		
 		private IObjectPool<Bullet, BulletType> _poolElementGetter;
-		public void Init(IObjectPool<Bullet, BulletType> poolElementGetter)
+
+		private void OnValidate()
 		{
-			_poolElementGetter = poolElementGetter;
+			if (_bulletStorage != null && _bulletStorage.GetComponent<IObjectPool<Bullet, BulletType>>() == null)
+			{
+				_bulletStorage = null;
+			}
 		}
-		
+
+		private void Awake()
+		{
+			_poolElementGetter = _bulletStorage.GetComponent<IObjectPool<Bullet, BulletType>>();
+		}
+
 		public void LookAt(Vector3 pointView)
 		{
 			Vector3 lookDirection = pointView - transform.position;
@@ -32,7 +43,7 @@ namespace Player
 
 		public void LaunchTo(Vector3 targetPoint)
 		{
-			Bullet bullet = _poolElementGetter.GetTemplate(BulletType.Default);
+			Bullet bullet = _poolElementGetter.GetElement(BulletType.Default);
 
 			Vector3 velocity = _trajectory.СalculateDirectionLaunch(_playerData.AngleLaunch, targetPoint);
 

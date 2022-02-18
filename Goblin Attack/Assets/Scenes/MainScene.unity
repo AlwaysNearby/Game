@@ -249,7 +249,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _templateDefault: {fileID: 8640864428655463925, guid: 0ea03ab017b766b4ab35ca1ebfa30b63, type: 3}
-  _templateExplosive: {fileID: 6305385989812116493, guid: 6a8027b0103b37a4fac0b99276942158, type: 3}
 --- !u!4 &610243434
 Transform:
   m_ObjectHideFlags: 0
@@ -698,7 +697,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3b076435dcbd646b322fa1b90b7cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPool: {fileID: 1455561481}
 --- !u!114 &2009275209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,6 +712,7 @@ MonoBehaviour:
   _placeLaunch: {fileID: 951487600}
   _trajectory: {fileID: 784664475}
   _playerData: {fileID: 11400000, guid: c76513802c54dd746b50436ff1ca49f0, type: 2}
+  _bulletStorage: {fileID: 1455561480}
 --- !u!114 &2009275210
 MonoBehaviour:
   m_ObjectHideFlags: 0

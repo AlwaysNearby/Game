@@ -1,10 +1,7 @@
-﻿using System;
-using UnityEngine;
-
-namespace Pool
+﻿namespace Pool
 {
-    public interface IObjectPool<T, U> where T : MonoBehaviour where U : Enum
+    public interface IObjectPool<T, TU>
     {
-        public T GetTemplate(U typeTemplate);
+        public T GetElement(TU elementType);
     }
 }

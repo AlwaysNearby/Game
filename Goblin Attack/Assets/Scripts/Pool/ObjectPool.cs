@@ -5,18 +5,18 @@ using UnityEngine;
 
 namespace Pool
 {
-    public abstract class ObjectPool<T, U>: MonoBehaviour,  IObjectPool<T, U> where T : MonoBehaviour where U : Enum
+    public abstract class ObjectPool<T, TU>: MonoBehaviour,  IObjectPool<T, TU> where T : MonoBehaviour where TU : Enum
     {
-        public class PoolElement
+        private class PoolElement
         {
             public bool IsActive;
             public T Instance;
-            public U Type;
+            public TU InstanceType;
 
-            public PoolElement(T instance, U type)
+            public PoolElement(T instance, TU instanceType)
             {
                 Instance = instance;
-                Type = type;
+                InstanceType = instanceType;
             }
 
         }
@@ -32,11 +32,11 @@ namespace Pool
 
         private void Start()
         {
-            Array allTypes = Enum.GetValues(typeof(U));
+            Array allTypes = Enum.GetValues(typeof(TU));
 
             foreach (var typeTemplate in allTypes) 
             {
-                SpawnElements(_baseCapacity, (U)typeTemplate);
+                SpawnElements(_baseCapacity, (TU)typeTemplate);
             }
             
         }
@@ -54,9 +54,9 @@ namespace Pool
             }
         }
 
-        public T GetTemplate(U typeTemplate)
+        public T GetElement(TU elementType)
         {
-            PoolElement poolElement = _pool.FirstOrDefault(e => e.IsActive == false && typeTemplate.Equals(e.Type));
+            PoolElement poolElement = _pool.FirstOrDefault(e => e.IsActive == false && elementType.Equals(e.InstanceType));
             
             if (poolElement != null)
             {
@@ -67,8 +67,8 @@ namespace Pool
             }
             else
             {
-                SpawnElements(_additionCapacity, typeTemplate);
-                return GetTemplate(typeTemplate);
+                SpawnElements(_additionCapacity, elementType);
+                return GetElement(elementType);
             }
         }
 
@@ -84,15 +84,15 @@ namespace Pool
             }
         }
 
-        protected abstract T CreateElement(U typeTemplate);
+        protected abstract T CreateElement(TU elementType);
         
-        private void SpawnElements(int count, U typeTemplate)
+        private void SpawnElements(int count, TU elementType)
         {
             for (int i = 0; i < count; i++)
             {
-                T instance = CreateElement(typeTemplate);
+                T instance = CreateElement(elementType);
                 instance.gameObject.SetActive(false);
-                PoolElement poolElement = new PoolElement(instance, typeTemplate);
+                PoolElement poolElement = new PoolElement(instance, elementType);
                 poolElement.IsActive = false;
                 instance.transform.SetParent(transform);
                 _pool.Add(poolElement);

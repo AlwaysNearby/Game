@@ -1,7 +1,4 @@
 using Converter;
-using Pool;
-using ScriptableObjects.PlayerBundle;
-using TrajectorySystem;
 using UnityEngine;
 
 namespace Player
@@ -9,8 +6,6 @@ namespace Player
 	[RequireComponent(typeof(PixelCoordinateConverter), typeof(Gun))]
 	public class Player : MonoBehaviour
 	{
-		[SerializeField] private BulletPool _bulletPool;
-
 		private PixelCoordinateConverter _pixelCoordinateConverter;
 		private Gun _cannon;
 
@@ -18,11 +13,6 @@ namespace Player
 		{
 			_pixelCoordinateConverter = GetComponent<PixelCoordinateConverter>();
 			_cannon = GetComponent<Gun>();
-		}
-
-		void Start()
-		{
-			_cannon.Init(_bulletPool);
 		}
 		
 		void Update()
