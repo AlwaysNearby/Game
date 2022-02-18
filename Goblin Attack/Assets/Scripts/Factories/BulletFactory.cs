@@ -5,18 +5,27 @@ using Projectile;
 
 namespace Factories
 {
+	public enum BulletType
+	{
+		Default,
+		Explosive,
+	}
 	public class BulletFactory : MonoBehaviour
 	{
-		[SerializeField] private Bullet _template;
-
-		public Bullet GetBullet(Action<Bullet> returnPool)
+		[SerializeField] private Bullet _templateDefault;
+		public Bullet Create(BulletType typeTemplate, Action<Bullet> returnPool)
 		{
-			Bullet bullet = Instantiate(_template);
-
-			bullet.Init(returnPool);
-			bullet.GetComponent<CameraDepartureDetector>().Init(returnPool, bullet);
-
-			return bullet;
+			switch (typeTemplate)
+			{
+				case BulletType.Default:
+					Bullet bulletDefault = Instantiate(_templateDefault);
+					bulletDefault.Init(returnPool);
+					return bulletDefault;
+				default:
+					throw new Exception();
+			}
+			
+			
 		}
 	}
 }

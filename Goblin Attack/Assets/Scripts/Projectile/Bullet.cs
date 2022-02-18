@@ -1,5 +1,5 @@
 using System;
-using Pool;
+using Converter;
 using UnityEngine;
 
 namespace Projectile
@@ -10,11 +10,15 @@ namespace Projectile
         private Rigidbody _selfBody;
         private Action<Bullet> _destroyed;
 
-        public void Init(Action<Bullet> destroyed)
-		{
+        private void Awake()
+        {
             _selfBody = GetComponent<Rigidbody>();
+        }
+
+        public void Init(Action<Bullet> destroyed)
+        {
             _destroyed = destroyed;
-		}
+        }
 
         public void SetVelocity(Vector3 velocity)
         {
@@ -26,10 +30,12 @@ namespace Projectile
 	        transform.position = position;
         }
 
-        private void FixedUpdate()
+        private void OnTriggerEnter(Collider other)
         {
-	        
+            if (other.TryGetComponent(out Ground ground))
+            {
+                _destroyed?.Invoke(this);
+            }
         }
-        
     }
 }

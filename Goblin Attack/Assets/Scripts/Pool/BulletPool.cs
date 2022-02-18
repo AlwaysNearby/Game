@@ -4,13 +4,13 @@ using Factories;
 
 namespace Pool
 {
-    public class BulletPool : ObjectPool<Bullet>
+    public class BulletPool : ObjectPool<Bullet, BulletType>
     {
         [SerializeField] private BulletFactory _bulletFactory;
-        
-        protected override Bullet CreateElement()
+        protected override Bullet CreateElement(BulletType typeTemplate)
         {
-           return _bulletFactory.GetBullet(ReturnToPool);
+           return _bulletFactory.Create(typeTemplate, ReturnToPool);
         }
+        
     }
 }

@@ -1,37 +1,62 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Pool
 {
-    public abstract class ObjectPool<T>: MonoBehaviour, IObjectPool<T> where T : MonoBehaviour
+    public abstract class ObjectPool<T, U>: MonoBehaviour,  IObjectPool<T, U> where T : MonoBehaviour where U : Enum
     {
-        private class PoolElement
+        public class PoolElement
         {
             public bool IsActive;
             public T Instance;
+            public U Type;
 
-            public PoolElement(T instance)
+            public PoolElement(T instance, U type)
             {
                 Instance = instance;
+                Type = type;
             }
 
         }
-        
         [SerializeField] private int _baseCapacity;
         [SerializeField] private int _additionCapacity;
 
         private List<PoolElement> _pool;
 
-        public void Init()
+        private void Awake()
         {
             _pool = new List<PoolElement>();
-            SpawnElements(_baseCapacity);
         }
 
-        public T GetElement()
+        private void Start()
         {
-            PoolElement poolElement = _pool.FirstOrDefault(e => e.IsActive == false);
+            Array allTypes = Enum.GetValues(typeof(U));
+
+            foreach (var typeTemplate in allTypes) 
+            {
+                SpawnElements(_baseCapacity, (U)typeTemplate);
+            }
+            
+        }
+
+        private void OnValidate()
+        {
+            if (_baseCapacity <= 16)
+            {
+                _baseCapacity = 16;
+            }
+
+            if (_additionCapacity <= 16)
+            {
+                _additionCapacity = 16;
+            }
+        }
+
+        public T GetTemplate(U typeTemplate)
+        {
+            PoolElement poolElement = _pool.FirstOrDefault(e => e.IsActive == false && typeTemplate.Equals(e.Type));
             
             if (poolElement != null)
             {
@@ -42,8 +67,8 @@ namespace Pool
             }
             else
             {
-                SpawnElements(_additionCapacity);
-                return GetElement();
+                SpawnElements(_additionCapacity, typeTemplate);
+                return GetTemplate(typeTemplate);
             }
         }
 
@@ -59,15 +84,15 @@ namespace Pool
             }
         }
 
-        protected abstract T CreateElement();
+        protected abstract T CreateElement(U typeTemplate);
         
-        private void SpawnElements(int count)
+        private void SpawnElements(int count, U typeTemplate)
         {
             for (int i = 0; i < count; i++)
             {
-                T instance = CreateElement();
+                T instance = CreateElement(typeTemplate);
                 instance.gameObject.SetActive(false);
-                PoolElement poolElement = new PoolElement(instance);
+                PoolElement poolElement = new PoolElement(instance, typeTemplate);
                 poolElement.IsActive = false;
                 instance.transform.SetParent(transform);
                 _pool.Add(poolElement);
@@ -75,6 +100,4 @@ namespace Pool
         }
     }
     
-
- 
 }
