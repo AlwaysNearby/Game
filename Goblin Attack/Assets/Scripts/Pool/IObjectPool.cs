@@ -1,7 +1,9 @@
 ﻿namespace Pool
 {
-    public interface IObjectPool<T, TU>
+    public interface IObjectPool<T>
     {
-        public T GetElement(TU elementType);
+        public T GetElement(T template);
+
+        public void ReturnPool(T element);
     }
 }

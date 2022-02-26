@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -249,6 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _templateDefault: {fileID: 8640864428655463925, guid: 0ea03ab017b766b4ab35ca1ebfa30b63, type: 3}
+  _bulletPoolContainer: {fileID: 1455561480}
 --- !u!4 &610243434
 Transform:
   m_ObjectHideFlags: 0
@@ -651,7 +652,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseCapacity: 16
   _additionCapacity: 16
-  _bulletFactory: {fileID: 610243433}
 --- !u!4 &1455561482
 Transform:
   m_ObjectHideFlags: 0
@@ -712,7 +712,7 @@ MonoBehaviour:
   _placeLaunch: {fileID: 951487600}
   _trajectory: {fileID: 784664475}
   _playerData: {fileID: 11400000, guid: c76513802c54dd746b50436ff1ca49f0, type: 2}
-  _bulletStorage: {fileID: 1455561480}
+  _bulletFactoryContainer: {fileID: 610243432}
 --- !u!114 &2009275210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -974,7 +974,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d8ebb92b7c34e954cad3581d979c91a4, type: 2}
+  - {fileID: 2100000, guid: bba531dd56230dc4a8353b3392f89613, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

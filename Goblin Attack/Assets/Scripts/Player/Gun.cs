@@ -13,21 +13,28 @@ namespace Player
 		[SerializeField] private Transform _placeLaunch;
 		[SerializeField] private Trajectory _trajectory;
 		[SerializeField] private PlayerData _playerData;
-		[SerializeField] private GameObject _bulletStorage;
-		
-		private IObjectPool<Bullet, BulletType> _poolElementGetter;
+		[SerializeField] private GameObject _bulletFactoryContainer;
+
+		private IFactory<Bullet, BulletType> _factory;
 
 		private void OnValidate()
 		{
-			if (_bulletStorage != null && _bulletStorage.GetComponent<IObjectPool<Bullet, BulletType>>() == null)
+
+			if(_bulletFactoryContainer != null && _bulletFactoryContainer.GetComponent<IFactory<Bullet, BulletType>>() == null)
 			{
-				_bulletStorage = null;
+				_bulletFactoryContainer = null;
 			}
+
 		}
 
 		private void Awake()
 		{
-			_poolElementGetter = _bulletStorage.GetComponent<IObjectPool<Bullet, BulletType>>();
+			if(_bulletFactoryContainer == null)
+			{
+				throw new Exception("No factory assigned");
+			}
+
+			_factory = _bulletFactoryContainer.GetComponent<IFactory<Bullet, BulletType>>();
 		}
 
 		public void LookAt(Vector3 pointView)
@@ -43,12 +50,11 @@ namespace Player
 
 		public void LaunchTo(Vector3 targetPoint)
 		{
-			Bullet bullet = _poolElementGetter.GetElement(BulletType.Default);
+			Bullet bullet = _factory.Get(BulletType.Default, _placeLaunch.position);
 
 			Vector3 velocity = _trajectory.СalculateDirectionLaunch(_playerData.AngleLaunch, targetPoint);
 
 			bullet.SetVelocity(velocity);
-			bullet.SetDeparturePosition(_placeLaunch.position);
 		}
 
 		public void ShowTrajectoryBullet(Vector3 targetPoint)

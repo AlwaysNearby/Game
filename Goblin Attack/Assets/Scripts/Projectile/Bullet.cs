@@ -15,9 +15,10 @@ namespace Projectile
             _selfBody = GetComponent<Rigidbody>();
         }
 
-        public void Init(Action<Bullet> destroyed)
+        public void Init(Action<Bullet> destroyed, Vector3 positionSpawn)
         {
             _destroyed = destroyed;
+            transform.position = positionSpawn;
         }
 
         public void SetVelocity(Vector3 velocity)
@@ -25,10 +26,6 @@ namespace Projectile
 	        _selfBody.velocity = velocity;
         }
         
-        public void SetDeparturePosition(Vector3 position)
-        {
-	        transform.position = position;
-        }
 
         private void OnTriggerEnter(Collider other)
         {

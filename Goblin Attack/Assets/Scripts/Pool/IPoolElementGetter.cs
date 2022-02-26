@@ -4,6 +4,6 @@ namespace Pool
 {
     public interface IPoolElementGetter<T> where T : MonoBehaviour
     {
-        public T GetElement();
+        public T GetElement(T template);
     }
 }

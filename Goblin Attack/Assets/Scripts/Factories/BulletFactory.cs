@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Projectile;
+using Pool;
 
 namespace Factories
 {
@@ -8,19 +9,42 @@ namespace Factories
 	{
 		Default,
 	}
-	public class BulletFactory : MonoBehaviour
+
+	public class BulletFactory : MonoBehaviour, IFactory<Bullet, BulletType>
 	{
 		[SerializeField] private Bullet _templateDefault;
-		public Bullet Create(BulletType typeTemplate, Action<Bullet> returnPool)
+		[SerializeField] private GameObject _bulletPoolContainer;
+
+		private IObjectPool<Bullet> _pool;
+
+		private void OnValidate()
 		{
-			switch (typeTemplate)
+			if(_bulletPoolContainer != null && _bulletPoolContainer.GetComponent<IObjectPool<Bullet>>() == null)
+			{
+				_bulletPoolContainer = null;
+			}
+		}
+
+		private void Awake()
+		{
+			if(_bulletPoolContainer == null)
+			{
+				throw new Exception("No pool assigned");
+			}
+
+			_pool = _bulletPoolContainer.GetComponent<IObjectPool<Bullet>>();
+		}
+
+		public Bullet Get(BulletType template, Vector3 positionSpawn)
+		{
+			switch (template)
 			{
 				case BulletType.Default:
-					Bullet bulletDefault = Instantiate(_templateDefault);
-					bulletDefault.Init(returnPool);
+					Bullet bulletDefault = _pool.GetElement(_templateDefault);
+					bulletDefault.Init(_pool.ReturnPool, positionSpawn);
 					return bulletDefault;
 				default:
-					throw new Exception();
+					throw new Exception("No such template");
 			}
 			
 			
