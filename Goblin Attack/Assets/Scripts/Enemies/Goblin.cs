@@ -14,6 +14,11 @@ namespace Enemies
 			_selfBody = GetComponent<Rigidbody>();
 		}
 
+		public void Init(Vector3 placement)
+		{
+			transform.position = placement;
+		}
+
 		public void Move(Vector3 direction)
 		{
 			Vector3 currentPosition = _selfBody.position;
