@@ -6,7 +6,6 @@ namespace TrajectorySystem
     [RequireComponent(typeof(LineRenderer))]
     public class Trajectory : MonoBehaviour
     {
-	    [SerializeField] private Transform _launchPoint;
 	    [SerializeField] private int _maxCountPostions;
 
 	    private const float Gravity = 9.81f;
@@ -33,13 +32,13 @@ namespace TrajectorySystem
 	        }
         }
 
-        public void Draw(Vector3 speed, Vector3 targetPoint)
+        public void Draw(Vector3 speed, Vector3 origin, Vector3 targetPoint)
         {
 	        for (int i = 0; i < _maxCountPostions; i++)
 	        {
 		        float time = i * 0.1f;
 
-		        Vector3 position = _launchPoint.position + speed * time + Physics.gravity * (time * time * 0.5f);
+		        Vector3 position = origin + speed * time + Physics.gravity * (time * time * 0.5f);
 		        
 		        _nodesTrajectory.Add(position);
 		        
@@ -60,13 +59,13 @@ namespace TrajectorySystem
 	        _trajectoryRenderer.positionCount = 0;
         }
         
-        public Vector3 СalculateDirectionLaunch(float angleLaunchInDegrees,  Vector3 targetPoint)
+        public Vector3 СalculateDirectionLaunch(float angleLaunchInDegrees, Transform launchPoint, Vector3 targetPoint)
         {
-	        Vector3 direction = targetPoint - _launchPoint.position;
+	        Vector3 direction = targetPoint - launchPoint.position;
 
 	        float lengthPath = direction.magnitude;
 
-	        float angleDeflection = Vector3.Angle(_launchPoint.forward, direction) * Mathf.Deg2Rad;
+	        float angleDeflection = Vector3.Angle(launchPoint.forward, direction) * Mathf.Deg2Rad;
 
 	        float angleLaunchInRadians = angleLaunchInDegrees * Mathf.Deg2Rad;
 

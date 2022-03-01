@@ -1,53 +1,44 @@
 ﻿using System;
-using UnityEngine;
 using Projectile;
-using Pool;
+using UnityEngine;
+using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Factories
 {
-	public enum BulletType
-	{
-		Default,
-	}
+    public enum BulletType
+    {
+        Default = 0,
+    }
 
-	public class BulletFactory : MonoBehaviour, IFactory<Bullet, BulletType>
-	{
-		[SerializeField] private Bullet _templateDefault;
-		[SerializeField] private GameObject _bulletPoolContainer;
+    public class BulletFactory : IFactoryBullet<BulletType>
+    {
+        private readonly DiContainer _diContainer;
 
-		private IObjectPool<Bullet> _pool;
+        private Object _template;
+        
+        public BulletFactory(DiContainer diContainer)
+        {
+            _diContainer = diContainer;
+        }
 
-		private void OnValidate()
-		{
-			if(_bulletPoolContainer != null && _bulletPoolContainer.GetComponent<IObjectPool<Bullet>>() == null)
-			{
-				_bulletPoolContainer = null;
-			}
-		}
+        public void Load()
+        {
+            _template = Resources.Load("Bullets/Bullet");
+        }
 
-		private void Awake()
-		{
-			if(_bulletPoolContainer == null)
-			{
-				throw new Exception("No pool assigned");
-			}
-
-			_pool = _bulletPoolContainer.GetComponent<IObjectPool<Bullet>>();
-		}
-
-		public Bullet Get(BulletType template, Vector3 positionSpawn)
-		{
-			switch (template)
-			{
-				case BulletType.Default:
-					Bullet bulletDefault = _pool.GetElement(_templateDefault);
-					bulletDefault.Init(_pool.ReturnPool, positionSpawn);
-					return bulletDefault;
-				default:
-					throw new Exception("No such template");
-			}
-			
-			
-		}
-	}
+        public void Create(BulletType type, Vector3 spawnPosition, Vector3 velocity)
+        {
+            switch (type)
+            {
+                case BulletType.Default:
+                    GameObject template = _diContainer.InstantiatePrefab(_template);
+                    Bullet bullet = template.AddComponent<Bullet>();
+                    bullet.Init(spawnPosition, velocity);
+                    break;
+                default:
+                    throw new Exception();
+            }
+        }
+    }
 }

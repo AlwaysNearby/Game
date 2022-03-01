@@ -1,53 +1,44 @@
-﻿using UnityEngine;
+﻿using System;
 using Enemies;
-using Pool;
-using System;
+using UnityEngine;
+using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Factories
 {
-	public enum GoblinType
-	{
-		Melee,
-	}
+    public enum GoblinType
+    {
+        Melee = 0,
+        Ranged = 0,
+    }
+    
+    public class GoblinFactory : IFactoryGoblin<GoblinType>
+    {
+        private DiContainer _diContainer;
 
-	public class GoblinFactory : MonoBehaviour, IFactory<Goblin, GoblinType>
-	{
-		[SerializeField] private GameObject _goblinPoolContainer;
-		[SerializeField] private Goblin _meleeTemplate;
+        private Goblin _meleeTemplate, _rangedTemplate;
+        
+        public GoblinFactory(DiContainer diContainer)
+        {
+            _diContainer = diContainer;
+        }
+        
+        public void Create(GoblinType type, Vector3 at)
+        {
+            switch (type)
+            {
+                case GoblinType.Melee:
+                    MeleeGoblin meleeGoblin = _diContainer.InstantiatePrefabForComponent<MeleeGoblin>(_meleeTemplate);
+                    meleeGoblin.Init(at);
+                    break;
+                default:
+                    throw new Exception();
+            }   
+        }
 
-		private IObjectPool<Goblin> _pool;
-
-		private void OnValidate()
-		{
-			if(_goblinPoolContainer != null && _goblinPoolContainer.GetComponent<IObjectPool<Goblin>>() == null)
-			{
-				_goblinPoolContainer = null;
-			}
-
-		}
-
-		private void Awake()
-		{
-			if(_goblinPoolContainer == null)
-			{
-				throw new Exception("No assigned pool");
-			}
-
-			_pool = _goblinPoolContainer.GetComponent<IObjectPool<Goblin>>();
-		}
-
-		public Goblin Get(GoblinType template, Vector3 spawnPosition)
-		{
-			switch(template)
-			{
-				case GoblinType.Melee:
-					Goblin melee = _pool.GetElement(_meleeTemplate);
-					melee.Init(spawnPosition);
-					return melee;
-				default:
-					throw new Exception("No such template");
-
-			}
-		}
-	}
+        public void Load()
+        {
+            _meleeTemplate = Resources.Load<Goblin>("Goblins/Melee Goblin");
+        }
+    }
 }

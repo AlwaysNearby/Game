@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
+using Zenject;
 
 namespace Converter {
 	public class PixelCoordinateConverter : MonoBehaviour
 	{
-		[SerializeField] private Ground _ground;
 		[SerializeField] private Camera _sourceRay;
-
+		[SerializeField] private Ground _ground;
+		
 		private Plane _planeConvert;
 
 		private void Start()
